@@ -1,6 +1,10 @@
 # Como Transformar o Sistema em Executável e Instalador (Windows)
 
-Este tutorial ensina como empacotar seu sistema Flask + Firebase em um executável (.exe) usando PyInstaller e criar um instalador (.exe) para Windows, facilitando a distribuição e instalação em outros computadores.
+> **ATENÇÃO:** O método recomendado e prioritário para usar o sistema é via deploy em nuvem (Railway, Heroku, etc) ou como PWA. O empacotamento desktop (PyInstaller) só deve ser utilizado em casos muito específicos, pois o sistema foi otimizado para rodar 100% na web.
+
+Este tutorial ensina como empacotar seu sistema Flask + Firebase em um executável (.exe) usando PyInstaller e criar um instalador (.exe) para Windows.
+
+**⚠️ IMPORTANTE:** O executável desktop depende de arquivos sensíveis (como a chave do Firebase). Nunca distribua esses arquivos publicamente. Prefira sempre o uso web/PWA para maior segurança e praticidade.
 
 ---
 
@@ -56,6 +60,8 @@ Crie uma pasta, por exemplo `dist/instalador/`, e coloque dentro:
 - `banco-clinica.sql`
 - (Se houver) `.env`
 
+> **Nunca inclua** arquivos sensíveis em repositórios públicos!
+
 ### Passo 3: Criar o script do instalador
 Exemplo de script (`instalador.iss`):
 ```iss
@@ -82,16 +88,34 @@ Name: "{group}\CRUD Clínica"; Filename: "{app}\app.exe"
 
 ---
 
-## 3. Observações Importantes
-- O executável depende dos arquivos de configuração e das views. Sempre distribua juntos.
-- O Firebase requer a chave `serviceAccountKey.json` e o `.env` (se usado).
-- O arquivo `firebase-key.json.example` é apenas um modelo de exemplo para você preencher e renomear como `serviceAccountKey.json` com os dados reais do seu projeto Firebase.
-- Teste o instalador em outro computador antes de distribuir.
+## 3. Como Usar o Sistema Instalado
+
+- Basta abrir o executável instalado. Ele rodará o sistema localmente em `http://localhost:5000`.
+- Não é necessário rodar comandos Python manualmente.
+- O sistema funcionará normalmente, inclusive como PWA, se instalado pelo navegador.
 
 ---
 
-## 4. Referências
+## 4. Solução de Problemas
+
+### O sistema não carrega ou aparece erro de chave Firebase
+- Verifique se o arquivo `serviceAccountKey.json` está presente junto ao executável.
+- Certifique-se de que a chave é válida para o projeto Firebase configurado.
+
+### Erro ao empacotar com PyInstaller
+- Use o parâmetro `--add-data` corretamente (veja exemplos acima).
+- Teste o executável em outro computador.
+
+### Problemas com portas ocupadas
+- Certifique-se de que a porta 5000 está livre antes de rodar o executável.
+
+---
+
+## 5. Referências
+- [Tutorial de Deploy em Nuvem (prioritário)](./TUTORIAL-DEPLOY.md)
 - [Documentação do PyInstaller](https://pyinstaller.org/en/stable/)
 - [Inno Setup](https://jrsoftware.org/isinfo.php)
 
 ---
+
+> **Recomendação:** Sempre priorize o uso via PWA e deploy em nuvem para maior compatibilidade, segurança e facilidade de manutenção. O empacotamento desktop é opcional e só deve ser feito se realmente necessário.
